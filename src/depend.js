@@ -200,7 +200,6 @@
                 var provider = container[providerName];
                 var instance;
                 if (provider) {
-                    // filter through decorators
                     instance = getAllWithMapped(decorators, id, name)
                         .reduce(reducer, provider.$get(container));
 
