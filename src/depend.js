@@ -317,31 +317,29 @@
     var globalConfig = DI.config = {
         strict : false
     };
+    
 
-    var objectTypes = {
-        'function' : true,
-        'object' : true
-    };
+    (function exportDI(that) {
 
-    (function exportDI(root) {
+        // 在Node.js环境下freeExports为exports，否则为false
+        var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
 
-        
-        var freeExports = objectTypes[typeof exports] && exports && !exports.nodeType && exports;
+        // 在Node.js环境下freeModule为module，否则为false
+        var freeModule = typeof module == 'object' && module && !module.nodeType && module;
 
-        
-        var freeModule = objectTypes[typeof module] && module && !module.nodeType && module;
-
-       
+        // 确定module.exports存在并赋值给moduleExports，否则返回false
         var moduleExports = freeModule && freeModule.exports === freeExports && freeExports;
 
-        var freeGlobal = objectTypes[typeof global] && global;
+        // 确认global全局对象是否存在并赋值给freeGlobal
+        var freeGlobal = typeof global == 'object' && global;
+        
         if (freeGlobal && (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal)) {
-            root = freeGlobal;
+            that = freeGlobal;
         }
 
         
-        if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
-            root.DI = DI;
+        if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
+            that.DI = DI;
             define(function() { return DI; });
         } else if (freeExports && freeModule) {
             if (moduleExports) {
@@ -350,8 +348,8 @@
                 freeExports.DI = DI;
             }
         } else {
-            root.DI = DI;
+            that.DI = DI;
         }
-    }((objectTypes[typeof window] && window) || this));
+    }((typeof window =='object' && window) || this));
     
 }.call(this));
