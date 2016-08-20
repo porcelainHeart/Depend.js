@@ -332,12 +332,13 @@
 
         // 确认global全局对象是否存在并赋值给freeGlobal
         var freeGlobal = typeof global == 'object' && global;
-        
+
+        // 在node.js或浏览器环境下就将freeGlobal赋值给that
         if (freeGlobal && (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal)) {
             that = freeGlobal;
         }
 
-        
+        // require.js的AMD模块加载
         if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
             that.DI = DI;
             define(function() { return DI; });
