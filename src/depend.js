@@ -1,4 +1,6 @@
 (function() {
+
+    // 初始化变量
     var id = 0,
         fullNameMap = [],
         decorators = [],
@@ -85,6 +87,7 @@
         return (services || []).map(getNestedService, this.container);
     }
 
+    // factory主函数
     function factory(name, Factory) {
         return provider.call(this, name, function GenericProvider() {
             this.$get = Factory;
@@ -155,22 +158,32 @@
         return new DI();
     }
 
+    // 缓冲器
     function reducer(instance, func) {
         return func(instance);
     }
 
+    // provider主函数
     function provider(fullName, Provider) {
         var parts, providers, name, factory;
         providers = get(providerMap, this.id);
         parts = fullName.split('.');
+
+        // 如果该依赖已经注入，向控制台报错并不执行构造器
         if (providers[fullName] && parts.length === 1 && !this.container[fullName + 'Provider']) {
             return console.error(fullName + ' provider already instantiated.');
         }
+
+        // 标记为true避免重复运行构造器
         providers[fullName] = true;
 
+        // 弹出parts[0]方便为构造器传参，同时方便判断是否链式依赖
         name = parts.shift();
+
+        // 单个依赖调用createProvider构造器，链式依赖调用createSubProvider构造器
         factory = parts.length ? createSubProvider : createProvider;
 
+        // 如果是单个依赖则只接收前两个参数
         return factory.call(this, name, Provider, fullName, parts);
     }
 
@@ -244,6 +257,7 @@
         return this;
     }
 
+    // service主函数
     function service(name, Service) {
         var deps = arguments.length > 2 ? slice.call(arguments, 2) : null;
         var depend = this;
@@ -283,6 +297,7 @@
         });
     }
 
+    // 容器构造函数
     function DI(name) {
         if (!(this instanceof DI)) {
             return DI.pop(name);
@@ -295,6 +310,7 @@
         };
     }
 
+    // 对外暴露的api接口
     DI.prototype = {
         constant : constant,
         decorator : decorator,
@@ -314,6 +330,7 @@
     DI.pop = pop;
     DI.list = list;
 
+    // 严格模式设置
     var globalConfig = DI.config = {
         strict : false
     };
