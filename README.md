@@ -71,10 +71,12 @@ Depend.js的API名称沿用了大多数人的习惯，比如service，factory，
 - DI.prototype.decorator
   
   你可以对你的依赖模块进行修饰
+
       demo.decorator(function(service) {
         return service.doSomething();
       });
   如果你只想修饰单独的某个依赖模块，你可以传入两个参数
+  
       demo.decorator('dependA',function(service) {
         return service.doSomething();
       });
