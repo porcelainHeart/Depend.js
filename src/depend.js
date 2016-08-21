@@ -8,9 +8,8 @@
         middles = [],
         depends = {},
         nestedDIs = [],
-        providerMap = [],
-        slice = Array.prototype.slice;
-
+        providerMap = [];
+        
     function concatIterator(a, b) {
         return a.concat(b);
     }
@@ -228,7 +227,7 @@
     }
 
     function createSubProvider(name, Provider, fullName, parts) {
-        var depend, depends, subname, id;
+        var depend, depends, subName, id;
 
         id = this.id;
         depends = get(nestedDIs, id);
@@ -236,10 +235,10 @@
         if (!depend) {
             this.container[name] = (depend = depends[name] = DI.pop()).container;
         }
-        subname = parts.join('.');
-        depend.provider(subname, Provider);
+        subName = parts.join('.');
+        depend.provider(subName, Provider);
 
-        set(fullNameMap, depend.id, subname, { fullName : fullName, id : id });
+        set(fullNameMap, depend.id, subName, { fullName : fullName, id : id });
 
         return this;
     }
@@ -259,7 +258,7 @@
 
     // service主函数
     function service(name, Service) {
-        var deps = arguments.length > 2 ? slice.call(arguments, 2) : null;
+        var deps = arguments.length > 2 ? Array.prototype.slice.call(arguments, 2) : null;
         var depend = this;
         return factory.call(this, name, function GenericFactory() {
             if (deps) {
