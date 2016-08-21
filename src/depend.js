@@ -1,19 +1,25 @@
 (function() {
 
     // 初始化变量
-    var id = 0,
-        fullNameMap = [],
-        decorators = [],
-        deferred = [],
-        middles = [],
-        depends = {},
-        nestedDIs = [],
-        providerMap = [];
-        
+    var fullNameMap = [],
+        decorators  = [],
+        providerMap = [],
+        nestedDIs   = [],
+        deferred    = [],
+        middles     = [],
+        depends     = {},
+        id          = 0;
+
+    // 缓冲器
+    function reducer(instance, func) {
+        return func(instance);
+    }
+    // curry化concat
     function concatIterator(a, b) {
         return a.concat(b);
     }
 
+    // 获取依赖信息
     function get(collection, id, name) {
         var group = collection[id];
         if (!group) {
@@ -25,7 +31,7 @@
         return name ? group[name] : group;
     }
 
-    function getAllWithMapped(collection, id, name) {
+    function allMap(collection, id, name) {
         return get(fullNameMap, id, name)
             .map(getMapped.bind(null, collection))
             .reduce(concatIterator, get(collection, id, name))
@@ -92,8 +98,8 @@
         return Object.keys(container || this.container || {}).filter(byMethod);
     }
 
-    function applyMiddleware(id, name, instance, container) {
-        var middleware = getAllWithMapped(middles, id, name);
+    function byMiddle(id, name, instance, container) {
+        var middleware = allMap(middles, id, name);
         var descriptor = {
             configurable : true,
             enumerable : true
@@ -138,11 +144,6 @@
             return instance;
         }
         return new DI();
-    }
-
-    // 缓冲器
-    function reducer(instance, func) {
-        return func(instance);
     }
 
     // provider主函数
@@ -195,13 +196,13 @@
                 var provider = container[providerName];
                 var instance;
                 if (provider) {
-                    instance = getAllWithMapped(decorators, id, name)
+                    instance = allMap(decorators, id, name)
                         .reduce(reducer, provider.$get(container));
 
                     delete container[providerName];
                     delete container[name];
                 }
-                return instance === undefined ? instance : applyMiddleware(id, name, instance, container);
+                return instance === undefined ? instance : byMiddle(id, name, instance, container);
             }
         };
 
@@ -232,7 +233,7 @@
     }
 
     function resolve(data) {
-        get(deferred, this.id, '__global__').forEach(function deferredIterator(func) {
+        get(deferred, this.id, '__global__').forEach(function (func) {
             func(data);
         });
 
