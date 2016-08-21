@@ -77,27 +77,10 @@
         return this;
     }
 
-    function defer(func) {
-        set(deferred, this.id, func);
-        return this;
-    }
-
-    function digest(services) {
-        return (services || []).map(getNestedService, this.container);
-    }
-
     // factory主函数
     function factory(name, Factory) {
         return provider.call(this, name, function GenericProvider() {
             this.$get = Factory;
-        });
-    }
-
-    function instanceFactory(name, Factory) {
-        return factory.call(this, name, function GenericInstanceFactory(container) {
-            return {
-                instance : Factory.bind(Factory, container)
-            };
         });
     }
 
@@ -270,14 +253,6 @@
         });
     }
 
-    function value(name, val) {
-        var parts;
-        parts = name.split('.');
-        name = parts.pop();
-        defineValue.call(parts.reduce(setValueObject, this.container), name, val);
-        return this;
-    }
-
     function setValueObject(container, name) {
         var cont = container[name];
         if (!cont) {
@@ -313,13 +288,9 @@
     DI.prototype = {
         decorator : decorator,
         factory : factory,
-        instanceFactory: instanceFactory,
         middleware : middleware,
         provider : provider,
-        register : register,
-        resolve : resolve,
-        service : service,
-        value : value
+        service : service
     };
 
     DI.pop = pop;
