@@ -279,12 +279,12 @@
     }
 
     function setValueObject(container, name) {
-        var nestedContainer = container[name];
-        if (!nestedContainer) {
-            nestedContainer = {};
-            defineValue.call(container, name, nestedContainer);
+        var cont = container[name];
+        if (!cont) {
+            cont = {};
+            defineValue.call(container, name, cont);
         }
-        return nestedContainer;
+        return cont;
     }
 
     function defineValue(name, val) {
@@ -311,13 +311,9 @@
 
     // 对外暴露的api接口
     DI.prototype = {
-        constant : constant,
         decorator : decorator,
-        defer : defer,
-        digest : digest,
         factory : factory,
         instanceFactory: instanceFactory,
-        list : list,
         middleware : middleware,
         provider : provider,
         register : register,
