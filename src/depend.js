@@ -14,7 +14,7 @@
     function reducer(instance, func) {
         return func(instance);
     }
-    // curry化concat
+    // curry化
     function concatIterator(a, b) {
         return a.concat(b);
     }
@@ -31,6 +31,7 @@
         return name ? group[name] : group;
     }
 
+    // 返回集合所有信息的数组
     function allMap(collection, id, name) {
         return get(fullNameMap, id, name)
             .map(getMapped.bind(null, collection))
@@ -38,10 +39,12 @@
             .concat(get(collection, id, '__global__'));
     }
 
+    // 用于获取修饰信息的迭代器
     function getMapped(collection, data) {
         return get(collection, data.id, data.fullName);
     }
 
+    // 用于获取对象嵌套信息的迭代器
     function getNested(obj, prop) {
         var service = obj[prop];
         if (service === undefined && globalConfig.strict) {
@@ -50,6 +53,7 @@
         return service;
     }
 
+    // 获取嵌套对象中存储的服务
     function getNestedService(fullName) {
         return fullName.split('.').reduce(getNested, this);
     }
