@@ -5,7 +5,7 @@ Depend.js是一个小巧精致的js类库，可以为您的web应用提供依赖
 
 很遗憾Depend.js不支持IE9以下的浏览器，但是我想你也不会让一个webapp兼容IE8（笑）
 
-以下是Depend.js的API列表以及简单介绍
+以下是Depend.js的API列表以及简单介绍：
 
 ---
 
