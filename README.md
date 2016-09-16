@@ -95,3 +95,5 @@ Depend.js的API名称沿用了大多数人的习惯，比如service，factory，
         console.log('dependA was accessed!');
         continue();
       });
+      
+  更多api开发中，近日将上线
