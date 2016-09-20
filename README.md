@@ -32,7 +32,7 @@ Depend.js的API名称沿用了大多数人的习惯，比如service，factory，
       
 - DI.prototype.factory
   
-  如果你需要用到更复杂的逻辑去修饰你的依赖模块，那你需要使用factory方法：
+  如果你需要用到更复杂的逻辑去修饰你的依赖模块，那你需要使用factory方法
       
       var demo = new DI();
       demo.service('dependA', dependA);
